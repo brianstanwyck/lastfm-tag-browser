@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
 gem 'httparty'
-gem 'open-uri'
 gem 'json'
 gem 'sinatra'
