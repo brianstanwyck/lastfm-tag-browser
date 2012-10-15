@@ -27,7 +27,7 @@ class LastFM
         name: tag,
         link: '?t=' + tag.gsub(/\s+/, '_'),
         children: similar_tags(tag).map do |other_tag|
-          tag_tree(other_tag['name'], depth - 1)
+          tag_tree(other_tag[:name], depth - 1)
         end
       }
     end
