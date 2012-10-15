@@ -22,7 +22,7 @@ var vis = d3.select("#chart").append("svg")
         .append("g")
         .attr("transform", "translate(40, 0)");
 
-d3.json(t+".json", function(json) {
+d3.json("/tag_tree.json?t="+t, function(json) {
         var nodes = cluster.nodes(json);
 
         var link = vis.selectAll("path.link")

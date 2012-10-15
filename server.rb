@@ -15,7 +15,7 @@ class LastFM
     HTTParty.get(url).parsed_response["toptags"]["tag"]
   end
 
-  def tag_tree(tag, depth)
+  def tag_tree(tag, depth = 1)
     {
       name: tag,
       children: similar_tags(tag)
@@ -61,13 +61,13 @@ end
 get '/tag_tree.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:tag]
+  tag = params[:t]
   @last_fm.tag_tree(tag).to_json
 end
 
 get '/artists.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:tag]
+  tag = params[:t]
   @last_fm.tag_artists(tag).to_json
 end
