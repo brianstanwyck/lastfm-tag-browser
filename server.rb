@@ -16,10 +16,19 @@ class LastFM
   end
 
   def tag_tree(tag, depth = 1)
-    {
-      name: tag,
-      children: similar_tags(tag)
-    }
+    if depth == 1
+      {
+        name: tag,
+        children: similar_tags(tag)
+      }
+    else
+      {
+        name: tag,
+        children: similar_tags(tag).map do |other_tag|
+          tag_tree(other_tag['name'], depth - 1)
+        end
+      }
+    end
   end
 
   def tag_artists(tag)
@@ -62,7 +71,7 @@ get '/tag_tree.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
   tag = params[:t]
-  @last_fm.tag_tree(tag).to_json
+  @last_fm.tag_tree(tag, 2).to_json
 end
 
 get '/artists.json' do
