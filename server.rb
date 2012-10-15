@@ -19,11 +19,13 @@ class LastFM
     if depth == 1
       {
         name: tag,
+        link: '?t=' + tag.gsub(/\s+/, '_'),
         children: similar_tags(tag)
       }
     else
       {
         name: tag,
+        link: '?t=' + tag.gsub(/\s+/, '_'),
         children: similar_tags(tag).map do |other_tag|
           tag_tree(other_tag['name'], depth - 1)
         end
@@ -57,6 +59,10 @@ class TagTree
   end
 end
 
+def parse_tag(tag)
+  tag.gsub('_', ' ')
+end
+
 get '/' do
   send_file File.join('public','index.html')
 end
@@ -70,13 +76,13 @@ end
 get '/tag_tree.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:t]
+  tag = parse_tag params[:t]
   @last_fm.tag_tree(tag, 2).to_json
 end
 
 get '/artists.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:t]
+  tag = parse_tag params[:t]
   @last_fm.tag_artists(tag).to_json
 end
