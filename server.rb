@@ -16,15 +16,20 @@ class LastFM
     HTTParty.get(url).parsed_response["toptags"]["tag"]
   end
 
+  def link_to_tag(tag)
+    "?t=#{URI::encode tag}"
+  end
+
   def tag_tree(tag, depth = 1)
     if depth == 1
       {
-        name: tag,
+        name: URI::decode(tag),
+        link: link_to_tag(tag),
         children: similar_tags(tag)
       }
     else
       {
-        name: tag,
+        name: URI::decode(tag),
         children: similar_tags(tag).map do |other|
           if other[:name]
             name = URI::encode other[:name]
