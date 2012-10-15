@@ -17,10 +17,22 @@ class LastFM
   end
 
   def tag_tree(tag, depth = 1)
-    {
-      name: tag,
-      children: similar_tags(tag)
-    }
+    if depth == 1
+      {
+        name: tag,
+        children: similar_tags(tag)
+      }
+    else
+      {
+        name: tag,
+        children: similar_tags(tag).map do |other|
+          if other[:name]
+            name = URI::encode other[:name]
+            tag_tree(name, depth - 1)
+          end
+        end.compact
+      }
+    end
   end
 
   def tag_artists(tag)
@@ -39,7 +51,7 @@ class LastFM
     url = "http://ws.audioscrobbler.com/2.0/?method=tag.getsimilar&tag=#{tag}&api_key=#{@api_key}&format=json"
     HTTParty.get(url).parsed_response["similartags"]["tag"].take(15).map do |tag_hash|
       { name: tag_hash['name'] }
-    end
+    end[0..3]
   end
 end
 
@@ -63,7 +75,7 @@ get '/tag_tree.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
   tag = URI::encode params[:t]
-  @last_fm.tag_tree(tag).to_json
+  @last_fm.tag_tree(tag, 2).to_json
 end
 
 get '/artists.json' do
