@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'httparty'
 require 'json'
+require 'open-uri'
 
 LAST_FM_API_KEY = '18508165b781bb40ebbd6aa5401117e3'
 
@@ -61,13 +62,13 @@ end
 get '/tag_tree.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:t]
+  tag = URI::encode params[:t]
   @last_fm.tag_tree(tag).to_json
 end
 
 get '/artists.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
-  tag = params[:t]
+  tag = URI::encode params[:t]
   @last_fm.tag_artists(tag).to_json
 end
