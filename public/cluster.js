@@ -39,12 +39,16 @@ var node = vis.selectAll("g.node")
 
         node.append("circle")
         .attr("r", 4.5);
-
-node.append("text")
+node.append("foreignObject")
         .attr("dx", function(d) { return d.children ? -8 : 8; })
         .attr("dy", 3)
+        .attr("x",5)
+        .attr("y",-8)
+        .attr("width",150)
+        .attr("height",20)
         .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-        .text(function(d) { return d.name; });
+        .append("xhtml:body")
+        .html(function(d) { return '<a href="'+d.link+'">'+d.name+"</a>"; });
 });
 }
 
@@ -54,6 +58,6 @@ console.log(tag);
 if (tag) {
   drawTag(tag);
 }else{
- console.log("nothing"); 
+ $("body").html("<a href=\"?t=classical\">Enter the tree</a>") 
 }
 });
