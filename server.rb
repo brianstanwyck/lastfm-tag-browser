@@ -48,6 +48,10 @@ class TagTree
   end
 end
 
+get '/' do
+  send_file File.join('public','index.html')
+end
+
 get '/top_tags.json' do
   content_type :json
   @last_fm = LastFM.new(LAST_FM_API_KEY)
