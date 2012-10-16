@@ -3,7 +3,7 @@ require 'httparty'
 require 'json'
 require 'open-uri'
 
-LAST_FM_API_KEY = '18508165b781bb40ebbd6aa5401117e3'
+LAST_FM_API_KEY = ENV['LAST_FM_API_KEY']
 
 class LastFM
   def initialize(api_key)
